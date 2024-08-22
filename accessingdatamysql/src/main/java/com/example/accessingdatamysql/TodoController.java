@@ -50,22 +50,24 @@ public class TodoController {
             newTodo.setIscompleted(oldtodo.get().isIscompleted());
             todorepository.save(newTodo);
         }
-
+        else {
+            return "This id does not exist";
+        }
         return "Updated";
 
     }
 
     @PostMapping("changecompleted")
     public @ResponseBody String changecompletedTodo(
-            @RequestParam Integer id,
-            @RequestParam String name){
+            @RequestParam Integer id
+            ){
 
         Optional<Todo> oldtodo = todorepository.findById(id);
-        if(todorepository.findById(id).isPresent()){
+        if(oldtodo.isPresent()){
             Todo newTodo = new Todo();
             newTodo.setId(id);
-            newTodo.setName(name);
-            newTodo.setIscompleted(oldtodo.get().isIscompleted());
+            newTodo.setName(oldtodo.get().getName());
+            newTodo.setIscompleted(!oldtodo.get().isIscompleted());
             todorepository.save(newTodo);
         }
         else {
